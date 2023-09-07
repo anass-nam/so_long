@@ -1,19 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
+/*   ft_strdlen.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anammal <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: anammal <anammal@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/21 02:15:53 by anammal           #+#    #+#             */
-/*   Updated: 2022/10/21 02:15:55 by anammal          ###   ########.fr       */
+/*   Created: 2023/06/12 14:12:42 by anammal           #+#    #+#             */
+/*   Updated: 2023/06/12 14:12:56 by anammal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include<fcntl.h>
 
-void	ft_putchar_fd(char c, int fd)
+size_t	ft_strdlen(const char *s, int c)
 {
-	write(fd, &c, 1);
+	size_t	i;
+
+	i = 0;
+	while (*(s + i) && *(s + i) != c)
+		i++;
+	return (i);
 }
