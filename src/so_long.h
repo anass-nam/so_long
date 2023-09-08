@@ -27,7 +27,7 @@ typedef struct s_point
 
 typedef struct s_game
 {
-	t_map	**map;
+	t_map	map;
 	t_point	player;
 	t_point	*coll;
 	t_point	exit;
@@ -36,7 +36,7 @@ typedef struct s_game
 void	init_so_long(char const *map_file, t_game *game);
 //	exit handler functions
 void	exit_err(char const *err_msg);
-void	exit_err_heap(void	*ptr, void (*f)(void *));
-void	exit_err_heap2(t_list **ptr);
+// void	exit_err_heap(void	*ptr, void (*f)(void *));
+// void	exit_err_heap2(t_list **ptr);
 
 #endif

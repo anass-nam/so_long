@@ -35,6 +35,7 @@ $(NAME): $(LIBFT) $(OBJ) $(HEADER)
 $(LIBFT):
 	@make -C $(LFTDIR)
 	@make bonus -C $(LFTDIR)
+	@make gnl -C $(LFTDIR)
 
 %.o: %.c
 	@echo "$(CLR)$(Y) Compiling: $< ... Done$(NC)!"
