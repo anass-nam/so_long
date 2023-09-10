@@ -1,6 +1,16 @@
 #include "so_long.h"
 
-void wp(void *s) { ft_putstr_fd((char *)s, STDOUT_FILENO);}
+static void	free_nodes(t_list **list)
+{
+	t_list	*next;
+
+	while (*list)
+	{
+		next = (*list)->next;
+		free(*list);
+		*list = next;	
+	}
+}
 
 static t_list	*read_map(int fd)
 {
@@ -24,9 +34,41 @@ static t_list	*read_map(int fd)
 	return (list);
 }
 
-static void	parse_map(t_game *game, t_list **list)
+static void	flood_fill(char **map, int x, int y, int *count)
 {
+	if (map[y][x] != WALL)
+	{
+		if (map[y][x] == COLL || map[y][x] == EXIT)
+			(*count)++;
+		map[y][x] = WALL;
+		flood_fill(map, x - 1, y, count);
+		flood_fill(map, x + 1, y, count);
+		flood_fill(map, x, y - 1, count);
+		flood_fill(map, x, y + 1, count);
+	}
+}
 
+static bool check_valid_path(t_game *game)
+{
+	char	**tmp;
+	int		i;
+
+	tmp = (char **)ft_calloc(game->map->h + 1, sizeof(char *));
+	if (tmp == NULL)
+		return (false);
+	i = 0;
+	while (i < game->map->h)
+	{
+		tmp[i] = ft_strdup(game->map->data[i]);
+		if (tmp[i++] == NULL)
+			return (ft_free2d((void **)tmp), false);
+	}
+	i = 0;
+	flood_fill(tmp, game->pos_p->x, game->pos_p->y, &i);
+	ft_free2d((void **)tmp);
+	if (i - 1 != game->collectible)
+		return (false);
+	return (true);
 }
 
 void	init_so_long(char const *map_file, t_game *game)
@@ -41,6 +83,11 @@ void	init_so_long(char const *map_file, t_game *game)
 	close(fd);
 	if (map == NULL)
 		exit_err("ERROR: unable to get the map");
-	ft_lstiter(map, wp);
-	parse_map(game, &map);
+	if (!parse_map(game, map) || !check_valid_path(game))
+	{
+		ft_lstclear(&map, free);
+		free(game->map->data);
+		exit_err("ERROR: invalid map");
+	}
+	free_nodes(&map);
 }
