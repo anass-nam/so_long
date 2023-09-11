@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anammal <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/11 13:15:00 by anammal           #+#    #+#             */
+/*   Updated: 2023/09/11 13:15:11 by anammal          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
 static void	free_nodes(t_list **list)
@@ -8,7 +20,7 @@ static void	free_nodes(t_list **list)
 	{
 		next = (*list)->next;
 		free(*list);
-		*list = next;	
+		*list = next;
 	}
 }
 
@@ -48,7 +60,7 @@ static void	flood_fill(char **map, int x, int y, int *count)
 	}
 }
 
-static bool check_valid_path(t_game *game)
+static bool	check_valid_path(t_game *game)
 {
 	char	**tmp;
 	int		i;
