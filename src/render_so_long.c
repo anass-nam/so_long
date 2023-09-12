@@ -11,6 +11,23 @@ typedef struct s_mlx
     void    *exit;
 }       t_mlx;
 
+static void destroy_image(t_mlx *mlx, char *err)
+{
+    if (mlx->wall)
+        mlx_destroy_image(mlx->mlx, mlx->wall);
+    else if (mlx->empty)
+        mlx_destroy_image(mlx->mlx, mlx->empty);
+    else if (mlx->player)
+        mlx_destroy_image(mlx->mlx, mlx->player);
+    else if (mlx->collectible)
+        mlx_destroy_image(mlx->mlx, mlx->collectible);
+    else if (mlx->exit)
+        mlx_destroy_image(mlx->mlx, mlx->exit);
+    mlx_destroy_window(mlx->mlx, mlx->window);
+    if (err)
+        ft_putendl_fd(err, STDERR_FILENO);
+}
+
 static void put_image(t_mlx *mlx, char c, int x, int y)
 {
     if (c == WALL)
@@ -31,10 +48,20 @@ static void set_xpms(t_mlx *mlx)
     int w;
 
     mlx->wall = mlx_xpm_file_to_image(mlx->mlx, "./assets/wall.xpm", &w, &h);
+    if (mlx->wall == NULL)
+        destroy_image(mlx, "ERROR: can't get xpm file");
     mlx->empty = mlx_xpm_file_to_image(mlx->mlx, "./assets/empty.xpm", &w, &h);
+    if (mlx->empty == NULL)
+        destroy_image(mlx, "ERROR: can't get xpm file");
     mlx->player = mlx_xpm_file_to_image(mlx->mlx, "./assets/player.xpm", &w, &h);
+    if (mlx->player == NULL)
+        destroy_image(mlx, "ERROR: can't get xpm file");
     mlx->collectible = mlx_xpm_file_to_image(mlx->mlx, "./assets/collectible.xpm", &w, &h);
+    if (mlx->collectible == NULL)
+        destroy_image(mlx, "ERROR: can't get xpm file");
     mlx->exit = mlx_xpm_file_to_image(mlx->mlx, "./assets/exit.xpm", &w, &h);
+    if (mlx->exit == NULL)
+        destroy_image(mlx, "ERROR: can't get xpm file");
 }
 
 void    render_so_long(t_game *g)
