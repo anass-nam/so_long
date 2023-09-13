@@ -12,23 +12,26 @@
 
 #include "so_long.h"
 
-void	exit_err(char const *err_msg)
+void	exit_err(char *err_msg)
 {
 	if (err_msg)
-		ft_putendl_fd((char *)err_msg, STDERR_FILENO);
+		ft_putendl_fd(err_msg, STDERR_FILENO);
 	else
-		perror("ERROR");
+		perror("\033[1;101mERROR!\033[0m");
 	exit(EXIT_FAILURE);
 }
 
-// void	exit_err_heap(void	*ptr, void (*f)(void *))
-// {
-// 	f(ptr);
-// 	exit_err("ERROR: can not allocate needed memory");
-// }
+void	exit_err2(t_game *so_long, char *err_msg)
+{
+	ft_free2d((void **)so_long->map->data);
+	mlx_destroy_image(so_long->gui->mlx, so_long->gui->wall);
+	mlx_destroy_image(so_long->gui->mlx, so_long->gui->empty);
+	mlx_destroy_image(so_long->gui->mlx, so_long->gui->player);
+	mlx_destroy_image(so_long->gui->mlx, so_long->gui->collectible);
+	mlx_destroy_image(so_long->gui->mlx, so_long->gui->exit);
+	mlx_destroy_window(so_long->gui->mlx, so_long->gui->window);
+	if (err_msg)
+		exit_err(err_msg);
+	exit(EXIT_SUCCESS);
+}
 
-// void	exit_err_heap2(t_list **ptr)
-// {
-// 	f(ptr, free);
-// 	exit_err("ERROR: can not allocate needed memory");
-// }

@@ -1,16 +1,5 @@
 #include "so_long.h"
 
-typedef struct s_mlx
-{
-    void    *mlx;
-    void    *window;
-    void    *wall;
-    void    *empty;
-    void    *player;
-    void    *collectible;
-    void    *exit;
-}       t_mlx;
-
 static void destroy_image(t_mlx *mlx, char *err)
 {
     if (mlx->wall)
@@ -42,44 +31,84 @@ static void put_image(t_mlx *mlx, char c, int x, int y)
         mlx_put_image_to_window(mlx->mlx, mlx->window, mlx->exit, x * 32, y * 32);
 }
 
-static void set_xpms(t_mlx *mlx)
+static bool set_xpms(t_mlx *mlx)
 {
     int h;
     int w;
 
     mlx->wall = mlx_xpm_file_to_image(mlx->mlx, "./assets/wall.xpm", &w, &h);
-    if (mlx->wall == NULL)
-        destroy_image(mlx, "ERROR: can't get xpm file");
     mlx->empty = mlx_xpm_file_to_image(mlx->mlx, "./assets/empty.xpm", &w, &h);
-    if (mlx->empty == NULL)
-        destroy_image(mlx, "ERROR: can't get xpm file");
     mlx->player = mlx_xpm_file_to_image(mlx->mlx, "./assets/player.xpm", &w, &h);
-    if (mlx->player == NULL)
-        destroy_image(mlx, "ERROR: can't get xpm file");
     mlx->collectible = mlx_xpm_file_to_image(mlx->mlx, "./assets/collectible.xpm", &w, &h);
-    if (mlx->collectible == NULL)
-        destroy_image(mlx, "ERROR: can't get xpm file");
     mlx->exit = mlx_xpm_file_to_image(mlx->mlx, "./assets/exit.xpm", &w, &h);
-    if (mlx->exit == NULL)
-        destroy_image(mlx, "ERROR: can't get xpm file");
+    if (mlx->wall == NULL || mlx->empty == NULL || mlx->player == NULL || mlx->collectible == NULL || mlx->exit == NULL)
+    {
+        destroy_image(mlx, "\033[1;101m ERROR!\033[0m\ncan't get xpm file");
+        return (false);
+    }
+    return (true);
 }
 
-void    render_so_long(t_game *g)
+static void moveto(t_game *so_long, int h, int w)
 {
-    t_mlx   so_long;
-    int     x;
-    int     y;
+    int x;
+    int y;
+    int nx;
+    int ny;
 
-    so_long.mlx = mlx_init();
-    so_long.window = mlx_new_window(so_long.mlx, 32 * g->map->w, 32 * g->map->h, "So_long");
-    set_xpms(&so_long);
+    if (so_long->map->data[ny][nx] != WALL)
+    {
+        x = so_long->pos_p->x;
+        y = so_long->pos_p->y;
+        nx = so_long->pos_p->x + w;
+        ny = so_long->pos_p->y + h;
+        so_long->map->data[y][x] ^= so_long->map->data[ny][nx];
+        so_long->map->data[y][x] ^= so_long->map->data[ny][nx];
+        so_long->map->data[y][x] ^= so_long->map->data[ny][nx];
+        so_long->pos_p->x = nx;
+        so_long->pos_p->y = ny;
+        put_image(so_long->gui->mlx, so_long->map->data[y][x], x, y);
+        put_image(so_long->gui->mlx, so_long->map->data[ny][nx], nx, ny);
+    }
+}
+
+static int  key_hook(int key, void *ptr)
+{
+    if (key == 65307)
+        exit_err2((t_game *)ptr, NULL);
+    else if (key == 119)
+        moveto((t_game *)ptr, -1, 0);
+    else if (key == 97)
+        moveto((t_game *)ptr, 0, -1);
+    else if (key == 115)
+        moveto((t_game *)ptr, 1, 0);
+    else if (key == 100)
+        moveto((t_game *)ptr, 0, 1);
+    return (0);
+}
+
+void    render_so_long(t_game *so_long)
+{
+    int x;
+    int y;
+    int sx;
+    int sy;
+
+    sx = 32 * so_long->map->w;
+    sy = 32 * so_long->map->h;
+    so_long->gui->mlx = mlx_init();
+    if (so_long->gui->mlx == NULL)
+        exit_err2(so_long, "\033[1;101m ERROR!\033[0m\ncan't open a window");
+    so_long->gui->window = mlx_new_window(so_long->gui->mlx, sx, sy, "So_long");
+    if (!set_xpms(so_long->gui))
+        exit_err2(so_long, "");
     x = -1;
-    while (++x < g->map->w)
+    while (++x < so_long->map->w)
     {
         y = -1;
-        while (++y < g->map->h)
-            put_image(&so_long, g->map->data[y][x], x, y);
+        while (++y < so_long->map->h)
+            put_image(so_long->gui, so_long->map->data[y][x], x, y);
     }
-    
-    mlx_loop(so_long.mlx);
+    mlx_key_hook(so_long->gui->window, key_hook, so_long);
+    mlx_loop(so_long->gui->mlx);
 }

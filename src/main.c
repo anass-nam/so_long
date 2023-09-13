@@ -20,29 +20,29 @@ static void	check_map_ext(int ac, char const *map_file)
 	if (ac > 1)
 		len = ft_strlen(map_file);
 	if (len < 4 || ft_strncmp(map_file + len - 4, ".ber", 4))
-		exit_err("ERROR: invalid map file name");
+		exit_err("\033[1;101m ERROR!\033[0m\ninvalid map file name");
 }
 
 int	main(int ac, char const **av)
 {
-	t_game	game;
+	t_game	so_long;
 	t_map	map;
 	t_point	player;
 	t_point	exit;
+	t_mlx	gui;
 
-	game.map = &map;
-	game.pos_p = &player;
-	game.pos_e = &exit;
 	check_map_ext(ac, av[1]);
-	init_so_long(av[1], &game);
-	render_so_long(&game);
-	for (size_t i = 0; i < map.h; i++)
-	{
-		ft_putendl_fd(map.data[i], STDOUT_FILENO);
-		free(map.data[i]);
-	}
-	free(map.data);
-	printf("map (h = %d | w = %d)\npos_p (y = %d | x = %d)\npos_e (y = %d | x = %d)\ncount_c = %d\n", map.h, map.w, player.y, player.x, exit.y, exit.x, game.collectible);
+	ft_bzero(&so_long, sizeof so_long);
+	ft_bzero(&map, sizeof map);
+	so_long.map = &map;
+	ft_bzero(&player, sizeof player);
+	so_long.pos_p = &player;
+	ft_bzero(&exit, sizeof exit);
+	so_long.pos_e = &exit;
+	ft_bzero(&gui, sizeof gui);
+	so_long.gui = &gui;
+	init_so_long(av[1], &so_long);
+	render_so_long(&so_long);
 	return (0);
 }
 

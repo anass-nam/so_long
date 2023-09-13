@@ -39,11 +39,23 @@ typedef struct s_point
 	int		y;
 }			t_point;
 
+typedef struct s_mlx
+{
+    void    *mlx;
+    void    *window;
+    void    *wall;
+    void    *empty;
+    void    *player;
+    void    *collectible;
+    void    *exit;
+}       t_mlx;
+
 typedef struct s_game
 {
 	t_map	*map;
 	t_point	*pos_p;
 	t_point	*pos_e;
+	t_mlx	*gui;
 	int		player;
 	int		exit;
 	int		collectible;
@@ -53,8 +65,7 @@ void	init_so_long(char const *map_file, t_game *game);
 bool	parse_map(t_game *game, t_list *list);
 void    render_so_long(t_game *game);
 //	exit handler functions
-void	exit_err(char const *err_msg);
-// void	exit_err_heap(void	*ptr, void (*f)(void *));
-// void	exit_err_heap2(t_list **ptr);
+void	exit_err(char *err_msg);
+void	exit_err2(t_game *so_long, char *err_msg);
 
 #endif

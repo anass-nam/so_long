@@ -31,7 +31,7 @@ static bool	isnotvalid(char c, int h, int w, t_point p)
 	return (true);
 }
 
-static bool	parse_map_line(t_game *game, char *l, int i)
+static bool	parse_map_line(t_game *so_long, char *l, int i)
 {
 	t_point	pos;
 
@@ -39,46 +39,43 @@ static bool	parse_map_line(t_game *game, char *l, int i)
 	pos.y = i;
 	while (l[pos.x])
 	{
-		if (pos.x == game->map->w - (1 - (pos.y == game->map->h - 1)))
+		if (pos.x == so_long->map->w - (1 - (pos.y == so_long->map->h - 1)))
 			l[pos.x] = '\0';
-		else if (isnotvalid(l[pos.x], game->map->h, game->map->w, pos))
+		else if (isnotvalid(l[pos.x], so_long->map->h, so_long->map->w, pos))
 			return (false);
 		else if (l[pos.x] == PLAYER)
-			set_pos(game->pos_p, &(game->player), pos.x, pos.y);
+			set_pos(so_long->pos_p, &(so_long->player), pos.x, pos.y);
 		else if (l[pos.x] == EXIT)
-			set_pos(game->pos_e, &(game->exit), pos.x, pos.y);
+			set_pos(so_long->pos_e, &(so_long->exit), pos.x, pos.y);
 		else if (l[pos.x] == COLL)
-			game->collectible++;
+			so_long->collectible++;
 		pos.x++;
 	}
-	if (pos.x != game->map->w - (pos.y == game->map->h - 1))
+	if (pos.x != so_long->map->w - (pos.y == so_long->map->h - 1))
 		return (false);
 	return (true);
 }
 
-bool	parse_map(t_game *game, t_list *list)
+bool	parse_map(t_game *so_long, t_list *list)
 {
 	int	i;
 
-	game->map->h = ft_lstsize(list);
-	game->map->w = ft_strlen(list->content);
-	game->map->data = (char **)malloc(game->map->h * sizeof(char *));
-	if (game->map->data == NULL)
+	so_long->map->h = ft_lstsize(list);
+	so_long->map->w = ft_strlen(list->content);
+	so_long->map->data = (char **)ft_calloc(so_long->map->h + 1, sizeof(char *));
+	if (so_long->map->data == NULL)
 		return (false);
-	game->player = 0;
-	game->exit = 0;
-	game->collectible = 0;
 	i = 0;
 	while (list)
 	{
-		if (parse_map_line(game, list->content, i) == false)
+		if (parse_map_line(so_long, list->content, i) == false)
 			return (false);
-		game->map->data[i] = list->content;
+		so_long->map->data[i] = list->content;
 		list = list->next;
 		i++;
 	}
-	if (game->player != 1 || game->exit != 1 || !game->collectible)
+	if (so_long->player != 1 || so_long->exit != 1 || !so_long->collectible)
 		return (false);
-	game->map->w--;
+	so_long->map->w--;
 	return (true);
 }

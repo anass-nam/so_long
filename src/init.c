@@ -60,30 +60,30 @@ static void	flood_fill(char **map, int x, int y, int *count)
 	}
 }
 
-static bool	check_valid_path(t_game *game)
+static bool	check_valid_path(t_game *so_long)
 {
 	char	**tmp;
 	int		i;
 
-	tmp = (char **)ft_calloc(game->map->h + 1, sizeof(char *));
+	tmp = (char **)ft_calloc(so_long->map->h + 1, sizeof(char *));
 	if (tmp == NULL)
 		return (false);
 	i = 0;
-	while (i < game->map->h)
+	while (i < so_long->map->h)
 	{
-		tmp[i] = ft_strdup(game->map->data[i]);
+		tmp[i] = ft_strdup(so_long->map->data[i]);
 		if (tmp[i++] == NULL)
 			return (ft_free2d((void **)tmp), false);
 	}
 	i = 0;
-	flood_fill(tmp, game->pos_p->x, game->pos_p->y, &i);
+	flood_fill(tmp, so_long->pos_p->x, so_long->pos_p->y, &i);
 	ft_free2d((void **)tmp);
-	if (i - 1 != game->collectible)
+	if (i - 1 != so_long->collectible)
 		return (false);
 	return (true);
 }
 
-void	init_so_long(char const *map_file, t_game *game)
+void	init_so_long(char const *map_file, t_game *so_long)
 {
 	int		fd;
 	t_list	*map;
@@ -94,12 +94,12 @@ void	init_so_long(char const *map_file, t_game *game)
 	map = read_map(fd);
 	close(fd);
 	if (map == NULL)
-		exit_err("ERROR: unable to get the map");
-	if (!parse_map(game, map) || !check_valid_path(game))
+		exit_err("\033[1;101m ERROR!\033[0m\nunable to get the map");
+	if (!parse_map(so_long, map) || !check_valid_path(so_long))
 	{
 		ft_lstclear(&map, free);
-		free(game->map->data);
-		exit_err("ERROR: invalid map");
+		free(so_long->map->data);
+		exit_err("\033[1;101m ERROR!\033[0m\ninvalid map");
 	}
 	free_nodes(&map);
 }
