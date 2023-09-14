@@ -27,7 +27,10 @@ static void finish(t_game *so_long)
     int ew;
 
     if (so_long->collectible == 0)
+    {
+        ft_putendl_fd("> you won !", STDOUT_FILENO);
         exit_err2(so_long, NULL);
+    }
     eh = so_long->pos_e->y;
     ew = so_long->pos_e->x;
     put_image(so_long->gui, EMPTY, so_long->pos_p->x, so_long->pos_p->y);
@@ -48,12 +51,18 @@ static void moveto(t_game *so_long, int h, int w)
         finish(so_long);
     else 
         move(so_long, so_long->pos_p->y + h, so_long->pos_p->x + w);
+    ft_putstr_fd("> current move : ", STDOUT_FILENO);
+    ft_putnbr_fd(++so_long->move_c, STDOUT_FILENO);
+    ft_putchar_fd('\n', STDOUT_FILENO);
 }
 
 int  key_hook(int key, void *ptr)
 {
     if (key == 53)
+    {
+        ft_putendl_fd("> game over !", STDOUT_FILENO);
         exit_err2((t_game *)ptr, NULL);
+    }
     else if (key == 13)
         moveto((t_game *)ptr, -1, 0);
     else if (key == 0)

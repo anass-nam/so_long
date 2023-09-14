@@ -19,10 +19,9 @@ static void destroy_image(t_mlx *mlx, char *err)
 
 void put_image(t_mlx *gui, char c, int x, int y)
 {
+    mlx_put_image_to_window(gui->mlx, gui->window, gui->empty, x * 32, y * 32);
     if (c == WALL)
         mlx_put_image_to_window(gui->mlx, gui->window, gui->wall, x * 32, y * 32);
-    else if (c == EMPTY)
-        mlx_put_image_to_window(gui->mlx, gui->window, gui->empty, x * 32, y * 32);
     else if (c == PLAYER) 
         mlx_put_image_to_window(gui->mlx, gui->window, gui->player, x * 32, y * 32);
     else if (c == COLL)
