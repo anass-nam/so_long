@@ -65,6 +65,8 @@ typedef struct s_game
 void	init_so_long(char const *map_file, t_game *game);
 bool	parse_map(t_game *game, t_list *list);
 void    render_so_long(t_game *game);
+int  	key_hook(int key, void *ptr);
+void	put_image(t_mlx *gui, char c, int x, int y);
 //	exit handler functions
 void	exit_err(char *err_msg);
 void	exit_err2(t_game *so_long, char *err_msg);

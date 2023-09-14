@@ -17,12 +17,13 @@ static void destroy_image(t_mlx *mlx, char *err)
         ft_putendl_fd(err, STDERR_FILENO);
 }
 
-static void put_image(t_mlx *gui, char c, int x, int y)
+void put_image(t_mlx *gui, char c, int x, int y)
 {
-    mlx_put_image_to_window(gui->mlx, gui->window, gui->empty, x * 32, y * 32);
     if (c == WALL)
         mlx_put_image_to_window(gui->mlx, gui->window, gui->wall, x * 32, y * 32);
-    else if (c == PLAYER)
+    else if (c == EMPTY)
+        mlx_put_image_to_window(gui->mlx, gui->window, gui->empty, x * 32, y * 32);
+    else if (c == PLAYER) 
         mlx_put_image_to_window(gui->mlx, gui->window, gui->player, x * 32, y * 32);
     else if (c == COLL)
         mlx_put_image_to_window(gui->mlx, gui->window, gui->collectible, x * 32, y * 32);
@@ -46,52 +47,6 @@ static bool set_xpms(t_mlx *gui)
         return (false);
     }
     return (true);
-}
-
-static void swap(char *a, char *b)
-{
-    (*a) ^= (*b);
-    (*b) ^= (*a);
-    (*a) ^= (*b);
-}
-
-static void moveto(t_game *so_long, int h, int w)
-{
-    int x;
-    int y;
-    int nx;
-    int ny;
-
-    x = so_long->pos_p->x;
-    y = so_long->pos_p->y;
-    nx = so_long->pos_p->x + w;
-    ny = so_long->pos_p->y + h;
-    if (so_long->map->data[ny][nx] != WALL)
-    {
-        swap(&(so_long->map->data[y][x]), &(so_long->map->data[ny][nx]));
-        if (so_long->map->data[y][x] == COLL)
-            so_long->map->data[y][x] = EMPTY;
-        
-        so_long->pos_p->x = nx;
-        so_long->pos_p->y = ny;
-        put_image(so_long->gui, so_long->map->data[y][x], x, y);
-        put_image(so_long->gui, so_long->map->data[ny][nx], nx, ny);
-    }
-}
-
-static int  key_hook(int key, void *ptr)
-{
-    if (key == 53)
-        exit_err2((t_game *)ptr, NULL);
-    else if (key == 13)
-        moveto((t_game *)ptr, -1, 0);
-    else if (key == 0)
-        moveto((t_game *)ptr, 0, -1);
-    else if (key == 1)
-        moveto((t_game *)ptr, 1, 0);
-    else if (key == 2)
-        moveto((t_game *)ptr, 0, 1);
-    return (0);
 }
 
 void    render_so_long(t_game *so_long)
