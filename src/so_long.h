@@ -59,6 +59,7 @@ typedef struct s_game
 	int		player;
 	int		exit;
 	int		collectible;
+	int		move_c;
 }			t_game;
 
 void	init_so_long(char const *map_file, t_game *game);
