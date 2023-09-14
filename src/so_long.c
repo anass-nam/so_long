@@ -58,18 +58,18 @@ static void moveto(t_game *so_long, int h, int w)
 
 int  key_hook(int key, void *ptr)
 {
-    if (key == 53)
+    if (key == 65307)
     {
         ft_putendl_fd("> game over !", STDOUT_FILENO);
         exit_err2((t_game *)ptr, NULL);
     }
-    else if (key == 13)
+    else if (key == 119)
         moveto((t_game *)ptr, -1, 0);
-    else if (key == 0)
+    else if (key == 97)
         moveto((t_game *)ptr, 0, -1);
-    else if (key == 1)
+    else if (key == 115)
         moveto((t_game *)ptr, 1, 0);
-    else if (key == 2)
+    else if (key == 100)
         moveto((t_game *)ptr, 0, 1);
     return (0);
 }

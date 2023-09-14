@@ -30,6 +30,8 @@ void	exit_err2(t_game *so_long, char *err_msg)
 	mlx_destroy_image(so_long->gui->mlx, so_long->gui->collectible);
 	mlx_destroy_image(so_long->gui->mlx, so_long->gui->exit);
 	mlx_destroy_window(so_long->gui->mlx, so_long->gui->window);
+	mlx_destroy_display(so_long->gui->mlx);
+	free(so_long->gui->mlx);
 	if (err_msg)
 		exit_err(err_msg);
 	exit(EXIT_SUCCESS);

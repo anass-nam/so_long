@@ -18,8 +18,8 @@ CFLAGS= -g # -Werror -Wall -Wextra
 LFTDIR=libft
 LIBFT=$(LFTDIR:=.a)
 LFT= -I$(LFTDIR) -L$(LFTDIR) -lft
-LMLX= -lmlx -framework OpenGL -framework AppKit
-# LMLX= -lmlx -lXext -lX11 -lm -lz
+# LMLX= -lmlx -framework OpenGL -framework AppKit
+LMLX= -lmlx -lXext -lX11 -lm -lz
 
 R=\033[1;31m
 G=\033[1;32m

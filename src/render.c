@@ -4,13 +4,13 @@ static void destroy_image(t_mlx *mlx, char *err)
 {
     if (mlx->wall)
         mlx_destroy_image(mlx->mlx, mlx->wall);
-    else if (mlx->empty)
+    if (mlx->empty)
         mlx_destroy_image(mlx->mlx, mlx->empty);
-    else if (mlx->player)
+    if (mlx->player)
         mlx_destroy_image(mlx->mlx, mlx->player);
-    else if (mlx->collectible)
+    if (mlx->collectible)
         mlx_destroy_image(mlx->mlx, mlx->collectible);
-    else if (mlx->exit)
+    if (mlx->exit)
         mlx_destroy_image(mlx->mlx, mlx->exit);
     mlx_destroy_window(mlx->mlx, mlx->window);
     if (err)
@@ -36,7 +36,7 @@ static bool set_xpms(t_mlx *gui)
     int w;
 
     gui->wall = mlx_xpm_file_to_image(gui->mlx, "./assets/wall.xpm", &w, &h);
-    gui->empty = mlx_xpm_file_to_image(gui->mlx, "./assets/empty.xpm", &w, &h);
+    gui->empty = mlx_xpm_file_to_image(gui->mlx, "./assets/emptyq.xpm", &w, &h);
     gui->player = mlx_xpm_file_to_image(gui->mlx, "./assets/player.xpm", &w, &h);
     gui->collectible = mlx_xpm_file_to_image(gui->mlx, "./assets/collectible.xpm", &w, &h);
     gui->exit = mlx_xpm_file_to_image(gui->mlx, "./assets/exit.xpm", &w, &h);
@@ -60,7 +60,7 @@ void    render_so_long(t_game *so_long)
         exit_err2(so_long, "\033[1;101m ERROR!\033[0m\ncan't open a window");
     so_long->gui->window = mlx_new_window(so_long->gui->mlx, x, y, "So_long");
     if (!so_long->gui->window || (!so_long->gui->wall && !set_xpms(so_long->gui)))
-        exit_err2(so_long, "");
+        exit_err2(so_long, "");  // need fixxing
     x = -1;
     while (++x < so_long->map->w)
     {
