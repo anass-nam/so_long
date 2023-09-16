@@ -5,18 +5,22 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: anammal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/11 13:16:42 by anammal           #+#    #+#             */
-/*   Updated: 2023/09/11 13:16:48 by anammal          ###   ########.fr       */
+/*   Created: 2023/09/16 22:17:17 by anammal           #+#    #+#             */
+/*   Updated: 2023/09/16 22:17:19 by anammal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-static void	set_pos(t_point *p, int *count, int x, int y)
+static void	set_pos(t_point *p, int x, int y)
 {
-	p->x = x;
-	p->y = y;
-	(*count)++;
+	if (p->x == 0)
+	{
+		p->x = x;
+		p->y = y;
+	}
+	else
+		p->x = -1;
 }
 
 static bool	isnotvalid(char c, int h, int w, t_point p)
@@ -31,7 +35,7 @@ static bool	isnotvalid(char c, int h, int w, t_point p)
 	return (true);
 }
 
-static bool	parse_map_line(t_game *so_long, char *l, int i)
+static bool	parse_map_line(t_game *so, char *l, int i)
 {
 	t_point	pos;
 
@@ -39,43 +43,43 @@ static bool	parse_map_line(t_game *so_long, char *l, int i)
 	pos.y = i;
 	while (l[pos.x])
 	{
-		if (pos.x == so_long->map->w - (1 - (pos.y == so_long->map->h - 1)))
+		if (pos.x == so->map->max.x - (1 - (pos.y == so->map->max.y - 1)))
 			l[pos.x] = '\0';
-		else if (isnotvalid(l[pos.x], so_long->map->h, so_long->map->w, pos))
+		else if (isnotvalid(l[pos.x], so->map->max.y, so->map->max.x, pos))
 			return (false);
 		else if (l[pos.x] == PLAYER)
-			set_pos(so_long->pos_p, &(so_long->player), pos.x, pos.y);
+			set_pos(&(so->map->player), pos.x, pos.y);
 		else if (l[pos.x] == EXIT)
-			set_pos(so_long->pos_e, &(so_long->exit), pos.x, pos.y);
+			set_pos(&(so->map->exit), pos.x, pos.y);
 		else if (l[pos.x] == COLL)
-			so_long->collectible++;
+			so->map->collectible++;
 		pos.x++;
 	}
-	if (pos.x != so_long->map->w - (pos.y == so_long->map->h - 1))
+	if (pos.x != so->map->max.x - (pos.y == so->map->max.y - 1))
 		return (false);
 	return (true);
 }
 
-bool	parse_map(t_game *so_long, t_list *list)
+bool	parse_map(t_game *so, t_list *list)
 {
 	int	i;
 
-	so_long->map->h = ft_lstsize(list);
-	so_long->map->w = ft_strlen(list->content);
-	so_long->map->data = (char **)ft_calloc(so_long->map->h + 1, sizeof(char *));
-	if (so_long->map->data == NULL)
-		return (false);
+	so->map->max.x = ft_strlen(list->content);
+	so->map->max.y = ft_lstsize(list);
+	so->map->content = (char **)ft_calloc(so->map->max.y + 1, sizeof(char *));
+	if (so->map->content == NULL)
+		return (game_over(NULL, M_ERR, M_MEM), false);
 	i = 0;
 	while (list)
 	{
-		if (parse_map_line(so_long, list->content, i) == false)
-			return (false);
-		so_long->map->data[i] = list->content;
+		if (parse_map_line(so, list->content, i) == false)
+			return (game_over(NULL, M_ERR, M_IMP), false);
+		so->map->content[i] = list->content;
 		list = list->next;
 		i++;
 	}
-	if (so_long->player != 1 || so_long->exit != 1 || !so_long->collectible)
-		return (false);
-	so_long->map->w--;
+	if (so->map->player.x < 1 || so->map->exit.x < 1 || !so->map->collectible)
+		return (game_over(NULL, M_ERR, M_IMP), false);
+	so->map->max.x--;
 	return (true);
 }

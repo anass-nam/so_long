@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: anammal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/11 13:15:00 by anammal           #+#    #+#             */
-/*   Updated: 2023/09/11 13:15:11 by anammal          ###   ########.fr       */
+/*   Created: 2023/09/16 22:17:09 by anammal           #+#    #+#             */
+/*   Updated: 2023/09/16 22:17:11 by anammal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,41 +65,44 @@ static bool	check_valid_path(t_game *so_long)
 	char	**tmp;
 	int		i;
 
-	tmp = (char **)ft_calloc(so_long->map->h + 1, sizeof(char *));
+	tmp = (char **)ft_calloc(so_long->map->max.y + 1, sizeof(char *));
 	if (tmp == NULL)
-		return (false);
+		return (game_over(NULL, M_ERR, M_MEM), false);
 	i = 0;
-	while (i < so_long->map->h)
+	while (i < so_long->map->max.y)
 	{
-		tmp[i] = ft_strdup(so_long->map->data[i]);
+		tmp[i] = ft_strdup(so_long->map->content[i]);
 		if (tmp[i++] == NULL)
-			return (ft_free2d((void **)tmp), false);
+		{
+			ft_free2d((void **)tmp);
+			return (game_over(NULL, M_ERR, M_MEM), false);
+		}
 	}
 	i = 0;
-	flood_fill(tmp, so_long->pos_p->x, so_long->pos_p->y, &i);
+	flood_fill(tmp, so_long->map->player.x, so_long->map->player.y, &i);
 	ft_free2d((void **)tmp);
-	if (i - 1 != so_long->collectible)
-		return (false);
+	if (i - 1 != so_long->map->collectible)
+		return (game_over(NULL, M_ERR, M_NVP), false);
 	return (true);
 }
 
-void	init_so_long(char const *map_file, t_game *so_long)
+void	init_so_long(t_game *so_long, char const *file)
 {
 	int		fd;
 	t_list	*map;
 
-	fd = open(map_file, O_RDONLY);
+	fd = open(file, O_RDONLY);
 	if (fd == -1)
-		exit_err(NULL);
+		game_over(NULL, M_PER | E_ERR, M_OPN);
 	map = read_map(fd);
 	close(fd);
 	if (map == NULL)
-		exit_err("\033[1;101m ERROR!\033[0m\nunable to get the map");
+		game_over(NULL, M_ERR | E_ERR, M_MEM);
 	if (!parse_map(so_long, map) || !check_valid_path(so_long))
 	{
-		ft_lstclear(&map, free);
-		free(so_long->map->data);
-		exit_err("\033[1;101m ERROR!\033[0m\ninvalid map");
+		free_nodes(&map);
+		game_over(so_long, D_MAP | E_ERR, NULL);
 	}
 	free_nodes(&map);
+	setup_display(so_long);
 }

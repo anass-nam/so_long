@@ -10,16 +10,16 @@
 #                                                                              #
 # **************************************************************************** #
 NAME=so_long
-HEADER=v2/$(NAME:=.h)
-SRC=$(wildcard v2/*.c)
+HEADER=src/$(NAME:=.h)
+SRC=$(wildcard src/*.c)
 OBJ=$(SRC:.c=.o)
 CC=cc
-CFLAGS= -g # -Werror -Wall -Wextra
+CFLAGS= # -Werror -Wall -Wextra
 LFTDIR=libft
 LIBFT=$(LFTDIR:=.a)
 LFT= -I$(LFTDIR) -L$(LFTDIR) -lft
-# LMLX= -lmlx -framework OpenGL -framework AppKit
-LMLX= -lmlx -lXext -lX11 -lm -lz
+LMLX= -lmlx -framework OpenGL -framework AppKit
+# LMLX= -lmlx -lXext -lX11 -lm -lz
 
 R=\033[1;31m
 G=\033[1;32m
