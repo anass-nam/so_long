@@ -35,6 +35,7 @@
 # define E_ERR 0x40	// exit with failure status
 
 # define M_EXT "ERROR!\nso_long: usage: ./so_long path/to/map*.ber"
+# define M_OPN "ERROR!\nso_long"
 # define M_IMP "ERROR!\nso_long: map: invalid map"
 # define M_NVP "ERROR!\nso_long: map: no valid path"
 # define M_XPM "ERROR!\nso_long failed to access assets"
@@ -42,49 +43,40 @@
 # define M_GO "GAME OVER !!"
 # define M_YW "You WON !!"
 
-typedef struct s_map
-{
-	char	**data;
-	int		w;
-	int		h;
-}			t_map;
-
 typedef struct s_point
 {
 	int		x;
 	int		y;
 }			t_point;
 
-typedef struct s_mlx
+typedef struct s_map
 {
-    void    *mlx;
-    void    *window;
-    void    *wall;
+	char	**content;
+	t_point	max;
+	t_point	player;
+	t_point	exit;
+	int		collectible;
+}			t_map;
+
+typedef struct s_img
+{
+	void    *wall;
     void    *empty;
     void    *player;
     void    *collectible;
     void    *exit;
-}       t_mlx;
+}       t_img;
 
 typedef struct s_game
 {
 	t_map	*map;
-	t_point	*pos_p;
-	t_point	*pos_e;
-	t_mlx	*gui;
-	int		player;
-	int		exit;
-	int		collectible;
+    void    *mlx;
+    void    *window;
+	t_img	*assets;
 	int		move_c;
 }			t_game;
 
-void	init_so_long(char const *map_file, t_game *game);
-bool	parse_map(t_game *game, t_list *list);
-void    render_so_long(t_game *game);
-int  	key_hook(int key, void *ptr);
-void	put_image(t_mlx *gui, char c, int x, int y);
-//	exit handler functions
-void	exit_err(char *err_msg);
-void	exit_err2(t_game *so_long, char *err_msg);
-
+void	init_so_long(t_game *so_long, char const *file);
+void	game_over(t_game *so_long, char option, char *msg);
+bool	parse_map(t_game *so_long, t_list *list);
 #endif

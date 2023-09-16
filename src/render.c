@@ -36,7 +36,7 @@ static bool set_xpms(t_mlx *gui)
     int w;
 
     gui->wall = mlx_xpm_file_to_image(gui->mlx, "./assets/wall.xpm", &w, &h);
-    gui->empty = mlx_xpm_file_to_image(gui->mlx, "./assets/emptyq.xpm", &w, &h);
+    gui->empty = mlx_xpm_file_to_image(gui->mlx, "./assets/empty.xpm", &w, &h);
     gui->player = mlx_xpm_file_to_image(gui->mlx, "./assets/player.xpm", &w, &h);
     gui->collectible = mlx_xpm_file_to_image(gui->mlx, "./assets/collectible.xpm", &w, &h);
     gui->exit = mlx_xpm_file_to_image(gui->mlx, "./assets/exit.xpm", &w, &h);

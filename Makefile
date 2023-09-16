@@ -10,8 +10,8 @@
 #                                                                              #
 # **************************************************************************** #
 NAME=so_long
-HEADER=src/$(NAME:=.h)
-SRC=$(wildcard src/*.c)
+HEADER=v2/$(NAME:=.h)
+SRC=$(wildcard v2/*.c)
 OBJ=$(SRC:.c=.o)
 CC=cc
 CFLAGS= -g # -Werror -Wall -Wextra
