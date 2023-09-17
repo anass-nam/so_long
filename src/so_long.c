@@ -38,7 +38,7 @@ static void	finish(t_game *so_long)
 	int	ew;
 
 	if (so_long->map->collectible == 0)
-		game_over(so_long, D_MLX | D_WIN | D_IMG | D_MAP | E_SUC, M_YW);
+		game_over(so_long, D_ALL | E_SUC, M_YW);
 	eh = so_long->map->exit.y;
 	ew = so_long->map->exit.x;
 	put_image(so_long, EMPTY, so_long->map->player.x, so_long->map->player.y);
