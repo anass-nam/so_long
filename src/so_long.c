@@ -73,7 +73,7 @@ static void	moveto(t_game *so_long, int h, int w)
 static int	key_hook(int key, void *ptr)
 {
 	if (key == 53)
-		game_over((t_game *)ptr, D_MLX | D_WIN | D_IMG | D_MAP | E_SUC, M_GO);
+		game_over((t_game *)ptr, D_ALL | E_SUC, M_GO);
 	else if (key == 13)
 		moveto((t_game *)ptr, -1, 0);
 	else if (key == 0)
@@ -97,6 +97,7 @@ void	play_so_long(t_game *so_long)
 		while (++y < so_long->map->max.y)
 			put_image(so_long, so_long->map->content[y][x], x, y);
 	}
-	mlx_key_hook(so_long->window, key_hook, so_long);
+	mlx_hook(so_long->window, 17, 0, gameover, so_long);
+	mlx_hook(so_long->window, 2, 0, key_hook, so_long);
 	mlx_loop(so_long->mlx);
 }

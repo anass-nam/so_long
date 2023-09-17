@@ -28,7 +28,7 @@ NC=\033[1;0m
 
 all: $(NAME)
 	
-$(NAME): $(LIBFT) $(OBJ) $(HEADER)
+$(NAME): $(LIBFT) $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) $(LFT) $(LMLX) -o $@
 	@echo "$(G)The compilation of $@ was successful.$(NC)"
 
@@ -37,7 +37,7 @@ $(LIBFT):
 	@make bonus -C $(LFTDIR)
 	@make gnl -C $(LFTDIR)
 
-%.o: %.c
+%.o: %.c $(HEADER)
 	@echo "$(Y) Compiling: $< ... Done$(NC)!"
 	@$(CC) $(CFLAGS) -c $< -o $@
 

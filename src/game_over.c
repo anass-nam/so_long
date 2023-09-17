@@ -47,3 +47,9 @@ void	game_over(t_game *so_long, t_byte option, char *msg)
 	if (option & E_SUC)
 		exit(EXIT_SUCCESS);
 }
+
+int	gameover(void *ptr)
+{
+	game_over((t_game *)ptr, D_ALL | E_SUC, M_GO);
+	return (0);
+}

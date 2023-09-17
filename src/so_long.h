@@ -92,5 +92,6 @@ bool	parse_map(t_game *so_long, t_list *list);
 void	setup_display(t_game *so_long);
 void	put_image(t_game *so, char c, int x, int y);
 void	play_so_long(t_game *so_long);
+int		gameover(void *ptr);
 
 #endif
