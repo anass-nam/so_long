@@ -100,7 +100,8 @@ void	init_so_long(t_game *so_long, char const *file)
 		game_over(NULL, M_ERR | E_ERR, M_MEM);
 	if (!parse_map(so_long, map) || !check_valid_path(so_long))
 	{
-		free_nodes(&map);
+		ft_bzero(so_long->map->content, so_long->map->max.y);
+		ft_lstclear(&map, free);
 		game_over(so_long, D_MAP | E_ERR, NULL);
 	}
 	free_nodes(&map);

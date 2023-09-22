@@ -34,8 +34,6 @@ void	game_over(t_game *so_long, t_byte option, char *msg)
 		destroy_images(so_long->mlx, so_long->assets);
 	if (option & D_WIN && so_long->window)
 		mlx_destroy_window(so_long->mlx, so_long->window);
-	if (option & D_MLX)
-		free(so_long->mlx);
 	if (option & M_ERR)
 		ft_putendl_fd(msg, STDERR_FILENO);
 	else if (option & M_PER)

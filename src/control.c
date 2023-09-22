@@ -45,26 +45,26 @@ static void	move_handler(t_game *so_long, int h, int w)
 	map = so_long->map->content;
 	pos.x = so_long->map->player.x + w;
 	pos.y = so_long->map->player.y + h;
-	if (map[pos.y][pos.x] == WALL)
-		return ;
-	else
+	if (map[pos.y][pos.x] != WALL)
+	{
 		move_player(so_long, pos);
-	ft_putstr_fd("> current move : ", STDOUT_FILENO);
-	ft_putnbr_fd(++so_long->move_c, STDOUT_FILENO);
-	ft_putchar_fd('\n', STDOUT_FILENO);
+		ft_putstr_fd("> current move : ", STDOUT_FILENO);
+		ft_putnbr_fd(++so_long->move_c, STDOUT_FILENO);
+		ft_putchar_fd('\n', STDOUT_FILENO);
+	}
 }
 
 int	key_hook(int key, void *ptr)
 {
 	if (key == 53)
 		game_over((t_game *)ptr, D_ALL | E_SUC, M_GO);
-	else if (key == 13)
+	else if (key == 13 || key == 126)
 		move_handler((t_game *)ptr, -1, 0);
-	else if (key == 0)
+	else if (key == 0 || key == 123)
 		move_handler((t_game *)ptr, 0, -1);
-	else if (key == 1)
+	else if (key == 1 || key == 125)
 		move_handler((t_game *)ptr, 1, 0);
-	else if (key == 2)
+	else if (key == 2 || key == 124)
 		move_handler((t_game *)ptr, 0, 1);
 	return (0);
 }

@@ -14,7 +14,7 @@ HEADER=src/$(NAME:=.h)
 SRC=$(wildcard src/*.c)
 OBJ=$(SRC:.c=.o)
 CC=cc
-CFLAGS= # -Werror -Wall -Wextra
+CFLAGS= -Werror -Wall -Wextra
 LFTDIR=libft
 LIBFT=$(LFTDIR:=.a)
 LFT= -I$(LFTDIR) -L$(LFTDIR) -lft
