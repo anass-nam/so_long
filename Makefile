@@ -6,7 +6,7 @@
 #    By: anammal <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/11 02:45:24 by anammal           #+#    #+#              #
-#    Updated: 2023/06/11 02:45:28 by anammal          ###   ########.fr        #
+#    Updated: 2023/09/25 21:14:41 by anammal          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NAME=so_long
@@ -18,8 +18,7 @@ CFLAGS= -Werror -Wall -Wextra
 LFTDIR=libft
 LIBFT=$(LFTDIR:=.a)
 LFT= -I$(LFTDIR) -L$(LFTDIR) -lft
-LMLX= -lmlx -framework OpenGL -framework AppKit
-# LMLX= -lmlx -lXext -lX11 -lm -lz
+LMLX= -lmlx -lXext -lX11 -lm -lz
 
 R=\033[1;31m
 G=\033[1;32m
@@ -27,7 +26,7 @@ Y=\033[1;33m
 NC=\033[1;0m
 
 all: $(NAME)
-	
+
 $(NAME): $(LIBFT) $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) $(LFT) $(LMLX) -o $@
 	@echo "$(G)The compilation of $@ was successful.$(NC)"
@@ -39,7 +38,7 @@ $(LIBFT):
 
 %.o: %.c $(HEADER)
 	@echo "$(Y) Compiling: $< ... Done$(NC)!"
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -O3 -c $< -o $@
 
 clean:
 	@make clean -C $(LFTDIR)
