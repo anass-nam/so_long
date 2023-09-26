@@ -56,15 +56,15 @@ static void	move_handler(t_game *so_long, int h, int w)
 
 int	key_hook(int key, void *ptr)
 {
-	if (key == 53)
+	if (key == 65307)
 		game_over((t_game *)ptr, D_ALL | E_SUC, M_GO);
-	else if (key == 13 || key == 126)
+	else if (key == 119 || key == 65362)
 		move_handler((t_game *)ptr, -1, 0);
-	else if (key == 0 || key == 123)
+	else if (key == 97 || key == 65361)
 		move_handler((t_game *)ptr, 0, -1);
-	else if (key == 1 || key == 125)
+	else if (key == 115 || key == 65364)
 		move_handler((t_game *)ptr, 1, 0);
-	else if (key == 2 || key == 124)
+	else if (key == 100 || key == 65363)
 		move_handler((t_game *)ptr, 0, 1);
 	return (0);
 }

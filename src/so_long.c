@@ -25,6 +25,6 @@ void	play_so_long(t_game *so_long)
 			put_image(so_long, so_long->map->content[y][x], x, y);
 	}
 	mlx_hook(so_long->window, 17, 0, gameover, so_long);
-	mlx_hook(so_long->window, 2, 0, key_hook, so_long);
+	mlx_key_hook(so_long->window, key_hook, so_long);
 	mlx_loop(so_long->mlx);
 }
